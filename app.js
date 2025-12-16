@@ -9,6 +9,8 @@ const loggedOutSection = document.getElementById('logged-out');
 const loggedInSection = document.getElementById('logged-in');
 const loginBtn = document.getElementById('login-btn');
 const logoutBtn = document.getElementById('logout-btn');
+const callApiBtn = document.getElementById('call-api-btn'); 
+const apiOutput = document.getElementById('api-output');     
 const profileContainer = document.getElementById('profile');
 let auth0Client;
 
@@ -110,6 +112,44 @@ async function displayProfile() {
   }
 }
 
+// Retrieve Access Token and call API (MOCKED)
+async function callProtectedApi() {
+  apiOutput.textContent = 'Calling API...';
+  try {
+    // 1. Get the Access Token silently
+    const token = await auth0Client.getTokenSilently({
+      authorizationParams: {
+        // NOTE: Since you don't have a real API endpoint,
+        // we use a placeholder audience and scope for demonstration.
+        audience: 'https://my-protected-api',
+        scope: 'read:data'
+      }
+    });
+
+    // 2. MOCK the API call (Replace this with a real fetch to your API)
+    const response = await new Promise(resolve => setTimeout(() => {
+      resolve({
+        status: 200,
+        json: async () => ({
+          message: "Protected data successfully retrieved!",
+          user_id: (await auth0Client.getUser()).sub,
+          token_type: "Bearer",
+          token_length: token.length
+        })
+      });
+    }, 1500)); // Simulate network latency
+
+    const data = await response.json();
+
+    // 3. Display the result
+    apiOutput.textContent = JSON.stringify(data, null, 2);
+
+  } catch (error) {
+    console.error('Error calling protected API:', error);
+    apiOutput.textContent = `Error: ${error.message}`;
+  }
+}
+
 // Event handlers
 async function login() {
   try {
@@ -161,6 +201,7 @@ function showLoggedOut() {
 // Event listeners
 loginBtn.addEventListener('click', login);
 logoutBtn.addEventListener('click', logout);
+callApiBtn.addEventListener('click', callProtectedApi);
 
 // Initialize the app
 initAuth0();

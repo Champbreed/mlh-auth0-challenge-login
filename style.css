@@ -211,3 +211,23 @@ body {
     padding: 2rem;
   }
 }
+.api-section-title {
+  font-size: 1.8rem;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+  color: #cbd5e0;
+  text-align: center;
+  width: 100%;
+}
+.api-output {
+  background-color: #1a1e27;
+  color: #68d391;
+  border: 1px solid #4a5568;
+  padding: 1rem;
+  border-radius: 8px;
+  white-space: pre-wrap;
+  font-family: monospace;
+  max-width: 100%;
+  overflow-x: auto;
+  text-align: left;
+}
